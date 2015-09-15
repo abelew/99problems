@@ -17,8 +17,25 @@
          (my-compress (cdr lst) result))
         (t (my-compress (cdr lst) (append result (list (car lst)))))
         ))
-             
-(setq test (my-compress start))
+
+(defun my-compress2 (lst &optional result)
+  (when (null result) (setq result '()))
+  (when (null lst) result)
+  (if (null (cddr lst))
+      (if (equal (car lst) (cadr lst))
+          (append result (list (car lst)))
+          (append result (list (car lst) (cadr lst))))
+      (progn
+        (setq lst (cdr lst))
+        (let ((first (car lst)) (second (cadr lst)))
+          (if (equal first second)
+              (my-compress2 lst result)
+              (my-compress2 lst (append result (list first))))))))
+
+
+
+;;(setq test (my-compress start))
+(setq test (my-compress2 start))
 test
 
   
