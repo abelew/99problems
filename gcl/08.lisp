@@ -5,7 +5,7 @@
 
 (setq start '(a a a a b b b b b c c c c c))
 
-;; this is still broken
+;; I am learning that I get the concept of 'append backwards...
 
 (defun my-compress (lst &optional result)
   (when (null result) (setq result '()))
