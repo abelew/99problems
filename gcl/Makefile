@@ -1,6 +1,6 @@
 .PHONY: clean all
 
-all:	01 02
+all:	01
 
 %:	%.lisp
 	gcl -load $@.lisp && mv tmpfile bin/$@
