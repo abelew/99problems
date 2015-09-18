@@ -1,5 +1,8 @@
 ;; 09 Pack elements into sublists
 
+;; notes to self, I am using cmucl
+;; (format uses ~S for any lisp object, ~D for any int, ~% is newlines)
+
 ;; (my-pack '(a a a a b c c a a d e e e e))
 ;; should evaulate to:
 ;; '((a a a a) (b) (c c) (a a) (d) (e e e e))
@@ -21,25 +24,22 @@
        do (progn
             (setq current_element (nth count lst))
             (setq next_element (nth next lst))
+            ;;(format t "loop start: ~S ~S ~S ~S ~%" current_element next_element count next)
             (incf count)
             (incf next)
-            (setq tmplist '())
-            (format t "~a ~a" current_element next)
-         ))))
-;;         (setq current_element (nth count lst))
-;;         (setq next_element (nth next lst))
-;;         (if (equal current_element next_element)
-;;             (append qtmplist (list current_element next_element))
-;;             (progn (append result (list tmplist))
-;;                    (setq tmplist (list next_element)))))))
+            (setq tmplist (append tmplist (list current_element)))
+            (if (not (equal current_element next_element))
+                (progn ;; else
+                  ;;(format t "Starting nonequal clause ~S ~%" tmplist)
+                  (setq result (append result (list tmplist)))
+                  (setq tmplist '())
+                  ))
+            ))
+    (format t "~a ~%" result)))
 
+(progn
+  (prin1 start)
+  (format t "~%")
+  (my-pack start))
 
-
-;;(setq test (my-compress start))
-(setq test (my-pack start))
-test
-
-  
-
-  
-  
+ 
