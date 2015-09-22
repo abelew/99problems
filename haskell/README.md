@@ -19,3 +19,5 @@ the only thing one needs to do to compile test.hs is:
 ghc -o test test.hs
 ```
 
+I am also adding haskell.el with the changes to my emacs configuration
+to make sending data to a running haskell process easier.

@@ -36,7 +36,7 @@ main = do
 --  second <- mylast' mylist
 --  putStrLn("The answer is " ++ first ++ " from first, and " ++ second ++ " from second.")
 
-
+-- The following are two ways of doing this
 mylist = [1,2,3,4,5,6,7,8,9,0]
 
 mylast :: [a] -> [a]
@@ -50,4 +50,7 @@ mylast' [a] = [a]
 mylast' (a:b) = if null(tail (a:b))
                 then [a]
                 else mylast b
+
+-- λ> 
+
 
