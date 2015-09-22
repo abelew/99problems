@@ -4,19 +4,9 @@ I am using nodejs and npm to play with javascript.
 Emacs' mode js-comint provides a way to evaluate commands much like
 one would do in haskell/lisp/etc.
 
-The following snippet was added to my emacs configuration to do this:
+The file node.el contains the lines I added to my emacs
+configuration in order to get node.js to work so that I may
+quickly/easily send commands to a running node.js process.
 
-```{elisp}
-(require 'js-comint)
-(setq inferior-js-program-command "nodejs --interactive")
-(setq inferior-js-mode-hook
-      (lambda ()
-        ;; We like nice colors
-        (ansi-color-for-comint-mode-on)
-        ;; Deal with some prompt nonsense
-        (add-to-list
-         'comint-preoutput-filter-functions
-         (lambda (output)
-           (replace-regexp-in-string "\033\\[[0-9]+[A-Z]" "" output)))))
-           ;;(replace-regexp-in-string "\033\\[[0-9]+[GK]" "" output)))))
-```
+
+
