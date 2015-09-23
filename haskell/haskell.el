@@ -17,10 +17,11 @@
      (define-key haskell-mode-map (kbd "C-`") 'haskell-interactive-bring)
      (define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
      (define-key haskell-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
-     (define-key haskell-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
+     (define-key haskell-mode-map (kbd "C-c C-b") 'haskell-process-cabal-build)
      (define-key haskell-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
      (define-key haskell-mode-map (kbd "C-c c") 'haskell-process-cabal)
      (define-key haskell-mode-map (kbd "C-c C-n") 'haskell-send-line)
+     (define-key haskell-mode-map (kbd "C-c C-c") 'haskell-send-paragraph)
      (define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)))
 
 ;; Then when editing my .hs file, I hit control-c control-l to load the file into an interactive haskell process.
@@ -41,19 +42,47 @@
    )
   answer)
 
+(defun print-region ()
+  (interactive "*")
+  (save-excursion
+    (prin1 (buffer-substring (region-beginning) (region-end)))))
 
+(defun haskell-send-region ()
+  (interactive "*")
+  (save-excursion
+    (setq region-string (buffer-substring (region-beginning) (region-end)))
+    (haskell-eval region-string)
+      ))
 
 (defun haskell-send-line ()
-  (interactive)
-  (end-of-line)
-  (set-mark (line-beginning-position))
-  (setq buffer-name "*haskell*")  
-  (setq region-string (buffer-substring (region-beginning) (region-end)))
-  (setq string (format "%s\n" region-string))
-  (setq proc (get-haskell-proc))
-  (set-process-buffer proc buffer)
-  (comint-send-string proc string)
-  )
+  (interactive "*")
+  (save-excursion
+    (end-of-line)
+    (set-mark (line-beginning-position))
+    (setq region-string (buffer-substring (region-beginning) (region-end)))
+    (haskell-eval region-string)
+    ))
+
+(defun haskell-send-paragraph ()
+  (interactive "*")
+  (save-excursion
+    (forward-paragraph)
+    (setq region-end (point))
+    (backward-paragraph)
+    (setq region-start (point))
+    (setq region-string (buffer-substring region-start region-end))
+    (haskell-eval region-string))
+    )
+    
+(defun haskell-eval (string)
+  (interactive "*")
+  (save-excursion
+    (setq buffer-name "*haskell*")
+    (setq haskell-proc (get-haskell-proc))
+    (setq haskell-buffer (get-buffer buffer-name))
+    (set-process-buffer haskell-proc haskell-buffer)
+    (setq final-string (format "%s\n" string))
+    (comint-send-string haskell-proc final-string)))
 
 
 (defun append-string-to-buffer (buffer string)
