@@ -1,0 +1,40 @@
+#!/usr/bin/env swipl
+               
+/* Prolog remains largely a mystery to me */
+/* I haven't yet figured out how to get it to just run something... */
+
+:- set_prolog_flag(verbose, silent).
+               
+:- initialization main.
+
+main :-
+    last_report,
+    fail.
+%%    last_report,
+%%    halt.
+main :-
+    fail.
+%%    halt(1).
+               
+last_report:-
+    write('The last element is:'), nl,
+    mylast([1,2,3,4,5,6], Answer),
+    write(Answer), nl,
+    fail.
+
+/* This should be very familiar to a haskell or ML programmer */
+% Some caveats first:  Things which start with capital letters are variables.
+% Things which don't start with caps are functions.
+
+%% mylast() with just one element will return the element.
+mylast([First], First).
+
+%% mylast with a list of [1,2...] promises to return last.
+%% Why did I do _First in the next line?
+%% http://www.swi-prolog.org/FAQ/SingletonVar.html
+mylast([_First | Rest], Last) :-
+    %% mylast of [2...] promises to return last.
+    mylast(Rest, Last).
+%% Therefore, this will recurse until the only thing left is First
+%% and return that.
+
