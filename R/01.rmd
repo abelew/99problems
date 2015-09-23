@@ -1,0 +1,36 @@
+# Problem 01
+
+In our lab we do everything via R markdown and pandoc.
+I see no reason to deviate from that for this.
+
+To see the result of the evaluation, hop into the block and hit
+control-c control-c.
+
+```{r report, eval=FALSE}
+
+## If for some reason you want a pdf report of this document:
+render("01.rmd", output_format="pdf_document")
+
+```
+
+```{r problem01}
+
+start_list = c(1,2,3,4,5,6)
+
+get_last = function(lst=c(1,2,3,4,5)) {
+    answer = NULL
+    if (is.null(lst)) {
+        return(answer)
+    } else {
+        for (c in 1:length(lst)) {
+            answer = lst[[c]]
+        }
+        return(answer)
+    }
+}
+
+print("The original list was: ")
+as.character(start_list)
+print(paste0("The last element is ", get_last(start_list)))
+
+```
