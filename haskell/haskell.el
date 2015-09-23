@@ -7,6 +7,8 @@
 
 ;; the following are changes I made to my emacs initialization to make
 ;; it work.
+;; It is not yet clear to me what the differences are between using run-haskell and haskell-inferior and why one gives me the lambda> prompt while the other gives me a Prelude> prompt.
+
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
@@ -25,10 +27,10 @@
      (define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)))
 
 ;; Then when editing my .hs file, I hit control-c control-l to load the file into an interactive haskell process.
-
 ;; From the lambda> prompt I can also do :l 01.hs to compile/load 01.hs
 
 (defun get-haskell-proc ()
+  "Since the haskell process isn't listed with a buffer like other REPL processes, I cheese it out by iterating over process-list"
   (interactive)
   (require 'cl)
   (setq lst (process-list))
@@ -42,12 +44,8 @@
    )
   answer)
 
-(defun print-region ()
-  (interactive "*")
-  (save-excursion
-    (prin1 (buffer-substring (region-beginning) (region-end)))))
-
 (defun haskell-send-region ()
+  "Send an arbitrary region to an existing haskell process."
   (interactive "*")
   (save-excursion
     (setq region-string (buffer-substring (region-beginning) (region-end)))
@@ -55,6 +53,7 @@
       ))
 
 (defun haskell-send-line ()
+  "Send the current line to a running haskell process."
   (interactive "*")
   (save-excursion
     (end-of-line)
@@ -75,6 +74,7 @@
     )
     
 (defun haskell-eval (string)
+  "Evaluate an arbitrary string in an existing process in the buffer named '*haskell*'")
   (interactive "*")
   (save-excursion
     (setq buffer-name "*haskell*")
@@ -82,9 +82,13 @@
     (setq haskell-buffer (get-buffer buffer-name))
     (set-process-buffer haskell-proc haskell-buffer)
     (setq final-string (format "%s\n" string))
-    (comint-send-string haskell-proc final-string)))
+    ;; comint-send-string and process-send-string should be equivalen in this context, but process-send string is simpler?
+    ;;(comint-send-string haskell-proc final-string)))
+    (process-send-string haskell-proc final-string)))
 
 
+;; I toyed with using this to send the current file to the haskell process by sending to the haskell buffer
+;; the string ':l <filename>, I might yet.
 (defun append-string-to-buffer (buffer string)
   ;; Modified from append-to-buffer, defined in the emacs-lisp intro
   "Append to specified buffer the specified text.

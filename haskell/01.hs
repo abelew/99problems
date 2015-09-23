@@ -53,5 +53,3 @@ mylast' (a:b) = if null(tail (a:b))
 
 -- λ> 
 
-
-
