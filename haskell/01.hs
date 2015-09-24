@@ -31,18 +31,19 @@ main = do
   let first_try = mylast mylist
   print first_try
   let second_try = mylast' mylist
-  print second_try
+  print second_try 
 --  first <- mylast mylist
 --  second <- mylast' mylist
 --  putStrLn("The answer is " ++ first ++ " from first, and " ++ second ++ " from second.")
 
 -- The following are two ways of doing this
+
 mylist = [1,2,3,4,5,6,7,8,9,0]
 
 mylast :: [a] -> [a]
 mylast [] = []
 mylast [a] = [a]
-mylast (a:b) = mylast b
+mylast (a:b) = mylast (b)
 
 mylast' :: [a] -> [a]
 mylast' [] = []
@@ -51,5 +52,13 @@ mylast' (a:b) = if null(tail (a:b))
                 then [a]
                 else mylast b
 
--- λ> 
+
+
+let mylist = [1,2,3,4,5]
+let answer = mylast(mylist)
+answer
+let firstlist = [1,2,3,4,5,6]
+let secondlist = [2,3,4,5,6,7]
+mylast(secondlist)
+mylast(firstlist)
 
