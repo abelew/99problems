@@ -20,15 +20,14 @@ though since we have my-remove, it doesn't seem very exciting..."
         (my-rnd-selectv1 lst (decf num) (append result (list new))))
     ))
 
-(defun my-rnd-selectv2 (lst num &optional result old-list) 
+(defun my-rnd-selectv2 (lst num &optional result)
   "This makes a list out of random elements from an existing list for up to num elements.
 Thus it is a shuffler."
-  (when (null old-list) (setq old-list lst))
   (setf selected-num (+ (random (length lst)) 1))
 ;;  (format t "Selected number: ~S ~%" selected-num)
   (setf new-element (nth (- selected-num 1) lst))
 ;;  (format t "Selected element: ~S ~%" new-element)
-  (setf new-list (my-remove old-list selected-num))
+  (setf new-list (my-remove lst selected-num))
 ;;  (format t "New list: ~S ~%" new-list)
 ;;  (format t "Old list: ~S ~%" old-list)
   (setf result (append result (list new-element)))
@@ -36,8 +35,23 @@ Thus it is a shuffler."
   (if (eq num 1)
       result
       ;;      (my-rnd-selectv2 new-list (decf num) result old-list)
-      (my-rnd-selectv2 new-list (decf num) result new-list)      
+      (my-rnd-selectv2 new-list (decf num) result)
       ))
+
+
+(defun my-rnd-selectv3 (lst num &optional result)
+  "This makes a list out of random elements from an existing list for up to num elements.
+Thus it is a shuffler."
+  (let* ((selected-num (+ (random (length lst)) 1))
+         (new-element (nth (- selected-num 1) lst))
+         (new-list (my-remove lst selected-num))
+         (result (append result (list new-element))))
+    (if (eq num 1)
+        result
+        ;;      (my-rnd-selectv2 new-list (decf num) result old-list)
+        (my-rnd-selectv3 new-list (decf num) result)
+        )))
+
 
 
 (defun my-remove (lst num &optional result)
