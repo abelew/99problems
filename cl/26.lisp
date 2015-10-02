@@ -43,6 +43,26 @@
       (my-expand (cdr lst) (append result (list (extract-all (caar lst) (cdr (car lst))))))
       ))
 
+;; I want a function which takes
+;; '( ((a b) (d e f)) ) and gives me
+;; '(((b) (d e f a)) ((a) (d e f b))) ;; two elements
+(defun expand-list (lst &optional result)
+  (loop for element in lst
+     do 
+       (let ((yoink (car element))
+             (receiver (cadr element))
+             (counter 0))
+         (format t "Looping with ~S with yoink: ~S receiver: ~S counter: ~S ~%" element yoink receiver counter)
+         (loop for taken in yoink
+            do 
+              (setq counter (+ 1 counter))
+              (format t "Inner loop now counter is: ~S taken is ~S ~%" counter taken)
+              (setq result (append result (list (list (my-remove counter yoink))
+                                                (append (list taken) receiver))))
+              (format t "Now result is ~S ~%" result)
+         ))))
+
+
 (defun my-extract-all (yoink onto &optional result num)
   (when (null num) (setq num 1))
   (if (null yoink)
@@ -56,12 +76,12 @@
 (defun pull-cdrs (lst)
   lst)
 
-(defun my-remove (element lst)
+(defun my-remove (num lst &optional result)
   "Remove the nth element from a list counting from the left side."
   (if (null lst)
       result
       (progn
         (if (eq num 1)
-            (my-remove (cdr lst) (decf num) result)
-            (my-remove (cdr lst) (decf num) (append result (list (car lst))))
+            (my-remove (decf num) (cdr lst) result)
+            (my-remove (decf num) (cdr lst) (append result (list (car lst))))
           ))))
