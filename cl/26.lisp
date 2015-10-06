@@ -30,18 +30,35 @@
 
 ;; 1.  Using every element of result, append to them every remaining element
 ;; remove every character in the list
-(defun combination (&key (lst '(a b c d)) (num 2) (result '()))
-  (when (null result) (setq result (append (list lst) (list result))))
-  (if (eq num 0)
-      (pull-cdrs result)
-      (combination lst (decf num) (my-expand result))
-      ))
 
-(defun my-expand (lst &optional result)
-  (if (null (cdr lst))
-      result
-      (my-expand (cdr lst) (append result (list (extract-all (caar lst) (cdr (car lst))))))
-      ))
+;;(loop for x from 1 to 5
+;;      for y = (* x 2)
+;;      collect y)
+
+(combination '(a b c d e f g h i j k l) 3)
+
+(defun combination (lst num)
+  (setq result '())
+  (format t "Starting.")
+  (loop for count from 0 to num do
+       (if (eq count 0)
+           (progn
+             (let ((c 0))
+               (loop for elem in lst do
+                    (incf c)
+                    (format t "c ~S elem ~S lst ~S result ~S ~%" c elem lst result)
+                    (setq result (append result (list (list (my-remove c lst) (list elem))))))))
+           (if (eq count num) ;; then we are finished
+               result
+               (progn ;; otherwise, continue
+                 (setq result (expand-list result))))
+           ))
+  (setq finally '())
+  (loop for almost in result do
+       (format t "Almost ~S ~S ~%" almost (cadr almost))
+       (setq finally (append finally (cdr almost))))
+  (format t "The final answer is ~S ~%" finally)
+  finally)
 
 ;; I want a function which takes
 ;; '( ((a b) (d e f)) ) and gives me
@@ -52,29 +69,20 @@
        (let ((yoink (car element))
              (receiver (cadr element))
              (counter 0))
-         (format t "Looping with ~S with yoink: ~S receiver: ~S counter: ~S ~%" element yoink receiver counter)
+;;         (format t "Looping with ~S with yoink: ~S receiver: ~S counter: ~S ~%" element yoink receiver counter)
          (loop for taken in yoink
             do 
               (setq counter (+ 1 counter))
-              (format t "Inner loop now counter is: ~S taken is ~S ~%" counter taken)
-              (setq result (append result (list (list (my-remove counter yoink))
-                                                (append (list taken) receiver))))
-              (format t "Now result is ~S ~%" result)
-         ))))
+;;              (format t "Inner loop now counter is: ~S taken is ~S ~%" counter taken)
+              (setq result
+                    (append result
+                            (list (list
+                                   (my-remove counter yoink)
+                                   (append (list taken) receiver)))))
+;;              (format t "Now result is ~S ~%" result)
+              )))
+  result)
 
-
-(defun my-extract-all (yoink onto &optional result num)
-  (when (null num) (setq num 1))
-  (if (null yoink)
-      result
-      (my-extract-all (cdr yoink)
-                      onto
-                      (append result (list (my-remove num yoink) (list (cons (car yoink) onto))))
-                      (+ num 1))
-      ))
-
-(defun pull-cdrs (lst)
-  lst)
 
 (defun my-remove (num lst &optional result)
   "Remove the nth element from a list counting from the left side."
