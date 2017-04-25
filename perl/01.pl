@@ -11,4 +11,3 @@ while (my $line = <IN>) {
 close(IN);
 my @list = split(/\s+/, $input);
 print "The last element was: $list[$#list]\n";
-    
