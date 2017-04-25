@@ -41,5 +41,3 @@
   (prin1 start)
   (format t "~%")
   (my-pack start))
-
- 

@@ -3,7 +3,7 @@
 all:	01
 
 %:	%.lisp
-	gcl -load $@.lisp && mv tmpfile bin/$@
+		cl-launch --lisp sbcl --file $@.lisp --dump '!' --output $@ -i '(script:run)'
 
 clean:
 	rm -f bin/*

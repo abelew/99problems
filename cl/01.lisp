@@ -5,6 +5,7 @@
 ;; (describe 'last_element)
 ;; (documentation 'last_element 'function)
 
+;; this was written so that only gcl will work.
 (defun main ()
   (format t "The last element was: ~S.~%" (last_element si::*command-args*))
   (force-output)

@@ -9,10 +9,10 @@ import optparse
 parser = optparse.OptionParser()
 parser.add_option('-l', dest="list",
                   default="1,1,1,1,1,1,1,3,3,5,5,7,8,8,5,5,3,2,1,1")
+
 options, remainder = parser.parse_args()
 lst = options.list
 lst = lst.split(',')
-
 
 def main(lst):
     i = 0

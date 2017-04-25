@@ -18,9 +18,10 @@ var start = [1,2,3,4,5,6];
 
 function get_last (list) {
     var len = list.length;
-    var answer = list[len-1];
+    var answer = list[len - 1];
     console.log("The final element of " + list + " is: " + answer + ".");
-    return(1);
+    return(answer);
 }
 
 get_last(start);
+
